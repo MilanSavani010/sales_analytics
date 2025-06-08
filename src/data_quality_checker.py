@@ -15,12 +15,36 @@ def load_data():
     #3. disconnect database
     try:
         conn = sqlite3.connect(DB_NAME)
-        df = pd.read_sql_query("SELECT * FROM sales", conn)
+        df = pd.read_sql_query("SELECT * FROM sales", conn,index_col=None)
         conn.close()
         return df
     except Exception as e:
         logging.error(f"Failed to load data: {e}")
         return None
+
+
+def check_data_quality(df):
+    # process
+    # missing value
+    # negative revenue
+    # duplicates
+    # append issues to report
+    report = {"issues": []}
+
+    missing = df.isnull().sum()
+    for column, count in missing.items():
+        if count > 0:
+            report["issues"].append(f"Missing values in {column}: {count}")
+
+    negative_revenue = df[df['revenue'] < 0]
+    if not negative_revenue.empty:
+        report["issues"].append(f"Negative revenue found: {len(negative_revenue)} rows")
+
+    duplicates = df[df.duplicated(['order_id'])]
+    if not duplicates.empty:
+        report["issues"].append(f"Duplicate order IDs: {len(duplicates)} rows")
+
+    return report
 
 
 
@@ -29,6 +53,7 @@ def main():
     if df is None:
         print("Failed to load data.")
         return
+    report = check_data_quality(df)
 
 if __name__ == '__main__':
     main()
