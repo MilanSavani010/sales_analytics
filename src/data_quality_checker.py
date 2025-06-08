@@ -46,7 +46,19 @@ def check_data_quality(df):
 
     return report
 
+def generate_quality_report(report):
+    # quality report in md for documentation
+    content = "# Data Quality Report\n\n"
+    if report["issues"]:
+        content += "## Issues Found\n"
+        for issue in report["issues"]:
+            content += f"- {issue}\n"
+    else:
+        content += "No data quality issues found.\n"
 
+    with open('../reports/data_quality_report.md', 'w') as f:
+        f.write(content)
+    logging.info("Generated data_quality_report.md")
 
 def main():
     df = load_data()
@@ -54,6 +66,7 @@ def main():
         print("Failed to load data.")
         return
     report = check_data_quality(df)
+    generate_quality_report(report)
 
 if __name__ == '__main__':
     main()
