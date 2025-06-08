@@ -46,7 +46,16 @@ def visualize_segments(df):
     plt.close()
     logging.info("Generated segmentation_plot.png")
 
+def generate_segmentation_report(df):
+    # report in md file for documentation
+    content = "# Customer Segmentation Report\n\n"
+    content += "## Summary\n"
+    content += df['segment'].value_counts().to_markdown() + "\n\n"
+    content += "![Segmentation Plot](../plots/segmentation_plot.png)"
 
+    with open('../reports/segmentation_report.md', 'w') as f:
+        f.write(content)
+    logging.info("Generated segmentation_report.md")
 
 def main():
     df = run_segmentation()
@@ -54,7 +63,8 @@ def main():
         print("Failed to perform segmentation.")
         return
     visualize_segments(df)
-
+    generate_segmentation_report(df)
+    print("Segmentation report generated: segmentation_report.md")
 
 
 if __name__ == "__main__":
