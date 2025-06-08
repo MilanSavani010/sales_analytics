@@ -129,7 +129,7 @@ def setup_database():
         (90, '2025-06-06', 104, -140.0, None),
         (91, '2025-06-18', 105, 130.0, ''),
         (92, '2025-06-29', 107, 0.0, 'Car Rental'),
-        (93, '2025-06-05', None, 285.0, 'Car Subscription'),
+        (93, '2025-06-05', None, 285.0, 'Car Pool'),
         (94, '2025-06-07', 102, 110.5, ''),
         (95, '2025-06-01', 101, 0.0, None),
         (96, None, 103, -75.0, ''),
@@ -175,12 +175,51 @@ def run_analytics():
         return None
 
 def generate_report(results):
+    if not results:
+        logging.error("No results to generate report.")
+        return
+
+    report_data = []
+    # Add total revenue
+    total_revenue = results['total_revenue']['total_revenue'].iloc[0]
+    report_data.append({
+        'Metric': 'Total Revenue',
+        'Product Category': '',
+        'Order Count': '',
+        'Revenue': f'{total_revenue:.2f}',
+        'Customer ID': '',
+    })
+
+    # Add orders by category
+    for _, row in results['orders_by_category'].iterrows():
+        report_data.append({
+            'Metric': 'Orders by Category',
+            'Product Category': row['product_category'],
+            'Order Count': row['order_count'],
+            'Revenue': f"{row['category_revenue']:.2f}",
+            'Customer ID': '',
+        })
+
+        # Add repeat customers
+    for _, row in results['repeat_customers'].iterrows():
+        customer_id = 'Unknown' if pd.isna(row['customer_id']) else int(row['customer_id'])
+        report_data.append({
+            'Metric': 'Repeat Customers',
+            'Product Category': '',
+            'Order Count': row['order_count'],
+            'Revenue': '',
+            'Customer ID': customer_id,
+        })
+
+
     with open('../reports/sales_report.csv', 'w', newline='') as f:
-        writer = csv.writer(f)
-        writer.writerow(['Report', 'Details'])
-        for name, df in results.items():
-            writer.writerow([name, df.to_string(index=False)])
-    logging.info("Generated sales_report.csv")
+        writer = csv.DictWriter(f, fieldnames=['Metric', 'Product Category', 'Order Count',
+                                               'Revenue', 'Customer ID'])
+        writer.writeheader()
+        for row in report_data:
+            writer.writerow(row)
+
+logging.info("Generated sales_report.csv")
 def main():
     setup_database()
     results = run_analytics()

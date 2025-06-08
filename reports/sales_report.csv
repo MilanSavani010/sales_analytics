@@ -1,17 +1,15 @@
-Report,Details
-total_revenue," total_revenue
-        8717.5"
-orders_by_category,"product_category  order_count  category_revenue
-            None           21            744.76
-                           33           2364.00
-      Car Rental           22           2275.25
-Car Subscription           22           3333.49"
-repeat_customers," customer_id  order_count
-         NaN           18
-       101.0           13
-       102.0           12
-       103.0           12
-       104.0           14
-       105.0           11
-       106.0           10
-       107.0            8"
+Metric,Product Category,Order Count,Revenue,Customer ID
+Total Revenue,,,8584.85,
+Orders by Category,,20,744.76,
+Orders by Category,,34,2114.00,
+Orders by Category,Car Pool,1,285.00,
+Orders by Category,Car Rental,22,2275.25,
+Orders by Category,Car Subscription,21,3165.84,
+Repeat Customers,,18.0,,Unknown
+Repeat Customers,,12.0,,101
+Repeat Customers,,11.0,,102
+Repeat Customers,,13.0,,103
+Repeat Customers,,15.0,,104
+Repeat Customers,,11.0,,105
+Repeat Customers,,10.0,,106
+Repeat Customers,,8.0,,107
