@@ -1,0 +1,17 @@
+Report,Details
+total_revenue," total_revenue
+        8717.5"
+orders_by_category,"product_category  order_count  category_revenue
+            None           21            744.76
+                           33           2364.00
+      Car Rental           22           2275.25
+Car Subscription           22           3333.49"
+repeat_customers," customer_id  order_count
+         NaN           18
+       101.0           13
+       102.0           12
+       103.0           12
+       104.0           14
+       105.0           11
+       106.0           10
+       107.0            8"
