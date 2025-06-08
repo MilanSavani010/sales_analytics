@@ -1,6 +1,7 @@
 import sqlite3
 import pandas as pd
 import logging
+import matplotlib.pyplot as plt
 
 logging.basicConfig(filename='../logs/segmentation.log', level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
@@ -33,9 +34,28 @@ def run_segmentation():
     except Exception as e:
         logging.error(f"Segmentation error: {e}")
         return None
+def visualize_segments(df):
+    # bar plot of customer segments
+    segment_counts = df['segment'].value_counts()
+    plt.figure(figsize=(8, 6))
+    segment_counts.plot(kind='bar', color='skyblue')
+    plt.title('Customer Segmentation by Revenue')
+    plt.xlabel('Segment')
+    plt.ylabel('Number of Customers')
+    plt.savefig('../plots/segmentation_plot.png')
+    plt.close()
+    logging.info("Generated segmentation_plot.png")
+
+
 
 def main():
     df = run_segmentation()
+    if df is None:
+        print("Failed to perform segmentation.")
+        return
+    visualize_segments(df)
+
+
 
 if __name__ == "__main__":
     main()
